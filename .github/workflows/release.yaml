@@ -3,8 +3,6 @@
 name: Release
 on:
   push:
-    tags:
-      - "v*"
 permissions:
   contents: write
 jobs:
@@ -46,17 +44,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v5
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_ACCESS_TOKEN }}
+          push: true
+          tags: kcllang/kcl
